@@ -18,7 +18,15 @@ const { Client,Collection,GatewayIntentBits,REST,Routes, EmbedBuilder, MessageFl
 
 const rest = new REST({version:"10"}).setToken(process.env.TOKEN)
 
+client = new Client({
+    intents:[
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent
+    ]
+})
 
+client.commands = new Collecfixtion()
 
 const commandsPath = path.join(__dirname,"commands")
 const commandFiles = fs.readdirSync(commandsPath).filter(fileName => fileName.endsWith(".js"))
@@ -35,15 +43,6 @@ for (const fileName of commandFiles) {
 }
 
 
-const client = new Client({
-    intents:[
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
-})
-
-client.commands = new Collection();
 
 client.once("clientReady",async ()=>{
     try {
