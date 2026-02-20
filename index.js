@@ -12,14 +12,14 @@ app.listen(port,() => {
     console.log("listening")
 })
 
-const { Client,GatewayIntentBits,REST,Routes} = require("discord.js")
+const { Client,GatewayIntentBits,REST,Routes, EmbedBuilder} = require("discord.js")
 
 const rest = new REST({version:"10"}).setToken(process.env.TOKEN)
 
 const commands = [
     {
         name:"ping",
-        description:"動くか確認"
+        description:"遅延を確認します"
     }
 ];
 
@@ -48,7 +48,15 @@ client.once("clientReady",()=>{
 client.on("interactionCreate",async (interaction) => {
     if(interaction.isChatInputCommand()){
       if(interaction.commandName === "ping"){
-          await interaction.reply("pong!")
+        const embed = new EmbedBuilder()
+          .setTitle("🏓PONG!")
+          .setDescription("🟢success")
+          .setColor("DarkGreen")
+          .addFields(
+            {name:"遅延",value:`${client.ws.ping}`,inline:true},
+          )
+          .setTimestamp()
+        await interaction.reply({embeds:[embed]})
       }
     }
 })
