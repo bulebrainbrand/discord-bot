@@ -12,8 +12,26 @@ app.listen(port,() => {
     console.log("listening")
 })
 
+const { Client,GatewayIntentBits,REST,Routes} = require("discord.js")
 
-const { Client,GatewayIntentBits,Events} = require("discord.js")
+const rest = new REST({version:"10"}).setToken(process.env.TOKEN)
+
+const commands = [
+    {
+        name:"ping",
+        description:"動くか確認"
+    }
+]
+
+(async () => {
+    try {
+        console.log("start set /commands")
+        await rest.put(Routes.applicationCommands(process.env.CLIENT_ID),{body:commands})
+        console.log("success set /commands")
+    } catch (e) {
+        console.error(e)
+    }
+})
 
 const client = new Client({
     intents:[
@@ -24,13 +42,14 @@ const client = new Client({
 })
 
 client.once("ready",()=>{
-    console.log("heiio discord")
+    console.log("hello discord")
 })
 
-client.on("messageCreate",(message) => {
-    if(message.author.bot)return;
-    if(message.content === "!ping"){
-        message.channel.send("pong!")
+client.on("interactionCreate",async (interaction) => {
+    if(interaction.isChatInputCommand()){
+      if(interaction.commandName === "!ping"){
+          await interaction.reply("pong!")
+      }
     }
 })
 
