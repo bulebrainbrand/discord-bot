@@ -31,7 +31,7 @@ const commands = [
     } catch (e) {
         console.error(e)
     }
-})
+})()
 
 const client = new Client({
     intents:[
