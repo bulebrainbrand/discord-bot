@@ -18,7 +18,7 @@ const { Client,Collection,GatewayIntentBits,REST,Routes, EmbedBuilder, MessageFl
 
 const rest = new REST({version:"10"}).setToken(process.env.TOKEN)
 
-client = new Client({
+const client = new Client({
     intents:[
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
