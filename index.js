@@ -1,6 +1,8 @@
 require("dotenv").config()
 
 const express = require("express")
+const fs = require("node:fs")
+const path = require("node:path")
 const app = express()
 const port = process.env.PORT
 
@@ -12,26 +14,26 @@ app.listen(port,() => {
     console.log("listening")
 })
 
-const { Client,GatewayIntentBits,REST,Routes, EmbedBuilder} = require("discord.js")
+const { Client,Collection,GatewayIntentBits,REST,Routes, EmbedBuilder, MessageFlags} = require("discord.js")
 
 const rest = new REST({version:"10"}).setToken(process.env.TOKEN)
 
-const commands = [
-    {
-        name:"ping",
-        description:"遅延を確認します"
-    }
-];
+client.commands = new Collection();
 
-(async () => {
-    try {
-        console.log("start set /commands")
-        await rest.put(Routes.applicationCommands(process.env.CLIENT_ID),{body:commands})
-        console.log("success set /commands")
-    } catch (e) {
-        console.error(e)
+const commandsPath = path.join(__dirname,"commands")
+const commandFiles = fs.readdirSync(commandsPath).filter(fileName => fileName.endsWith(".js"))
+
+const commandsJSON = []
+
+for (const fileName of commandFiles) {
+    const filePath = path.join(commandsPath,fileName)
+    const command = require(filePath)
+    if (Object.hasOwn(command,"data") && Object.hasOwn(command,"execute")) {
+        client.commands.set(command.data.name,command)
+        commandsJSON.push(JSON.stringify(command.data))
     }
-})();
+}
+
 
 const client = new Client({
     intents:[
@@ -41,22 +43,25 @@ const client = new Client({
     ]
 })
 
-client.once("clientReady",()=>{
+client.once("clientReady",async ()=>{
+    try {
+        await rest.put(Routes.applicationCommands(client.user.id),{body:commandsJSON})
+        console.log("success set command")
+    } catch (e) {
+        console.error("set command error",e)
+    }
     console.log("hello discord")
 })
 
 client.on("interactionCreate",async (interaction) => {
     if(interaction.isChatInputCommand()){
-      if(interaction.commandName === "ping"){
-        const embed = new EmbedBuilder()
-          .setTitle("🏓PONG!")
-          .setDescription("🟢success")
-          .setColor("DarkGreen")
-          .addFields(
-            {name:"遅延",value:`${client.ws.ping}`,inline:true},
-          )
-          .setTimestamp()
-        await interaction.reply({embeds:[embed]})
+      const command = client.commands.get(interaction.commandName)
+      if(!command)return;
+      try {
+        await command.execute(interaction)
+      } catch (e) {
+        console.error(`${interaction.commandName} runtime.`,e)
+        await interaction.reply({content:"エラーが発生しました",flags:[MessageFlags.Ephemeral]})
       }
     }
 })
