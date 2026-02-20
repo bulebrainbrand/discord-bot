@@ -38,13 +38,13 @@ for (const fileName of commandFiles) {
     const command = require(filePath)
     if (Object.hasOwn(command,"data") && Object.hasOwn(command,"execute")) {
         client.commands.set(command.data.name,command)
-        commandsJSON.push(JSON.stringify(command.data))
+        commandsJSON.push(command.data.toJSON())
     }
 }
 
 
 
-client.once("clientReady",async ()=>{
+client.once("ready",async ()=>{
     try {
         await rest.put(Routes.applicationCommands(client.user.id),{body:commandsJSON})
         console.log("success set command")
