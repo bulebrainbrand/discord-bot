@@ -26,7 +26,7 @@ client = new Client({
     ]
 })
 
-client.commands = new Collecfixtion()
+client.commands = new Collection()
 
 const commandsPath = path.join(__dirname,"commands")
 const commandFiles = fs.readdirSync(commandsPath).filter(fileName => fileName.endsWith(".js"))
