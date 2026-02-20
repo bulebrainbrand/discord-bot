@@ -21,7 +21,7 @@ const commands = [
         name:"ping",
         description:"動くか確認"
     }
-]
+];
 
 (async () => {
     try {
@@ -31,7 +31,7 @@ const commands = [
     } catch (e) {
         console.error(e)
     }
-})()
+})();
 
 const client = new Client({
     intents:[
