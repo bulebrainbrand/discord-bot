@@ -33,7 +33,7 @@ module.exports = {
             {name:"取得時間",value:new Date(cacheTime).toLocaleString("ja-JP",{timeZone:"Asia/Tokyo"})})
           .setColor(ok?"DarkGreen":"DarkRed") 
           .setTimestamp()
-        await interaction.reply({embeds:[embed]})
+        await interaction.editReply({embeds:[embed]})
     }
 }
 
