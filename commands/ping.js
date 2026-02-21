@@ -12,6 +12,6 @@ module.exports = {
           .addFields({name:"応答速度",value:`${client.ws.ping}`})
           .setColor("DarkGreen") 
           .setTimestamp()
-        await interaction.reply({embed:[embed]})
+        await interaction.reply({embeds:[embed]})
     }
 }
