@@ -9,7 +9,7 @@ module.exports = {
     async execute(interaction,client){
         await interaction.deferReply()
         
-        const {code,text,ok,time} = await getStatus()
+        const {code,text,ok,time,cacheTime} = await getStatus()
         const embed = new EmbedBuilder()
           .setTitle("Bloxd.io")
           .setDescription(ok?"成功":"失敗")
