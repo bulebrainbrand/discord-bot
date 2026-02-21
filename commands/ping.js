@@ -9,7 +9,7 @@ module.exports = {
         const embed = new EmbedBuilder()
           .setTitle("PONG!")
           .setDescription(messages[Math.floor(Math.random() * messages.length)])
-          .addFields({name:"応答速度",value:`${client.ws.ping}`})
+          .addFields({name:"応答速度",value:`${client.ws.ping}ms`})
           .setColor("DarkGreen") 
           .setTimestamp()
         await interaction.reply({embeds:[embed]})
