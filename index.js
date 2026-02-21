@@ -59,7 +59,7 @@ client.on("interactionCreate",async (interaction) => {
       const command = client.commands.get(interaction.commandName)
       if(!command)return;
       try {
-        await command.execute(interaction)
+        await command.execute(interaction,client)
       } catch (e) {
         console.error(`${interaction.commandName} runtime.`,e)
         await interaction.reply({content:"エラーが発生しました",flags:[MessageFlags.Ephemeral]})
