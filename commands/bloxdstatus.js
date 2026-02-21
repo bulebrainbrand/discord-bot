@@ -1,6 +1,6 @@
 const {SlashCommandBuilder,EmbedBuilder} = require("discord.js")
 
-const {getStatus} = require("getbloxdstatus")
+const {getStatus} = require("../getbloxdstatus.js")
 
 module.exports = {
     data:new SlashCommandBuilder()
